@@ -4,6 +4,14 @@ body {
     margin: 0;
 }
 
+.none {
+    display: none !important;
+}
+
+.unselectable {
+    user-select: none;
+}
+
 #app {
     display: flex;
     flex-direction: column;
@@ -32,15 +40,18 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     width: 100%;
+    padding: 16px 0;
 }
 
 #board {
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
     gap: 2px;
-    width: 450px;
-    height: 450px;
+    width: 350px;
+    height: 350px;
     background-color: #111;
 }
 
@@ -50,7 +61,7 @@ body {
     justify-content: center;
     cursor: pointer;
     width: 32%;
-    height: 33%;
+    height: 32%;
     background-color: #262626;
     border-radius: 4px;
 }
@@ -59,8 +70,58 @@ body {
     background-color: #292929;
 }
 
-#board .mark {
+.mark {
     fill: white;
-    width: 60%;
-    height: 60%;
+    width: 46%;
+    height: 46%;
+}
+
+#meta-box {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+#meta-box .results-box {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 12px;
+}
+
+#meta-box .results-box .result-box {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    padding: 8px 15px;
+    background-color: #262626;
+    color: white;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+#meta-box .results-box .icon {
+    width: 14px;
+    height: 14px;
+    color: white;
+    fill: white;
+}
+
+#game-status-feedback {
+    display: flex;
+    color: rgb(240, 240, 240);
+    fill: rgb(240, 240, 240);
+    margin: 4px 0 12px 0;
+}
+
+#game-status-feedback .icon {
+    width: 10px;
+    height: 10px;
+    margin-right: 4px;
+}
+
+#game-status-feedback .feedback {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
 }
