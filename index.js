@@ -6,6 +6,9 @@ document.querySelectorAll('#board .square').forEach((square) => {
         if(square.dataset.value != 0 || !mark_lock) return;
         mark_lock = false; // prevent any click event race condition
 
+        // Delete mouseenter event animated x
+        square.querySelector('.light-mark').remove();
+
         let mark = document.querySelector(`.${role}-mark`).cloneNode(true);
         mark.classList.remove('none');
         
@@ -26,10 +29,17 @@ document.querySelectorAll('#board .square').forEach((square) => {
             case 'win':
                 mark_lock = false;
                 document.querySelector(`#${role}-win-feedback`).classList.remove('none');
+                // Increase winner player score
+                let result = document.querySelector(`#${role}-result-box .result`);
+                result.textContent = isNaN(result.textContent) ? 1 : parseInt(result.textContent) + 1;
                 return;
             case 'draw':
                 mark_lock = false;
                 document.querySelector(`#draw-feedback`).classList.remove('none');
+                // In case of a draw, we increment result for both players
+                document.querySelectorAll('#results-box .result').forEach((result) => {
+                    result.textContent = isNaN(result.textContent) ? 1 : parseInt(result.textContent) + 1;
+                });
                 return;
             default:
                 // Role should be opposite when player 1 (x) press X we need to set role to player 2 (o)
@@ -40,6 +50,35 @@ document.querySelectorAll('#board .square').forEach((square) => {
                 
         }
 
+        mark_lock = true; // release the lock
+    });
+
+    // Add hover event
+    square.addEventListener('mouseenter', (event) => {
+        if(square.dataset.value==0) {
+            let mark = document.querySelector(`.${role}-mark`).cloneNode(true);
+            mark.classList.add('light-mark');
+            mark.classList.remove('none');
+            square.appendChild(mark);
+        }
+    });
+    
+    square.addEventListener('mouseleave', (event) => {
+        square.querySelector('.light-mark').remove();
+    });
+
+});
+
+document.querySelector('#restart-game').addEventListener('click', function() {
+    document.querySelectorAll('#board .square').forEach((square) => {
+        square.innerHTML = ''; // remove square marks
+        square.dataset.value = 0;
+
+        document.querySelectorAll('#game-status-feedback .feedback').forEach(feedback => feedback.classList.add('none'));
+        document.querySelectorAll('.result-box').forEach(box => box.classList.remove('selected-result-box'));
+        document.querySelector(`#x-turn-feedback`).classList.remove('none');
+        document.querySelector(`#x-result-box`).classList.add('selected-result-box');
+        role = 'x';
         mark_lock = true; // release the lock
     });
 });
