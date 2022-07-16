@@ -35,6 +35,11 @@ body {
     color: rgb(0, 160, 253);
 }
 
+.green-feedback {
+    color: #4cf74c !important;
+    fill: #4cf74c !important;
+}
+
 #board-box {
     background-color: #111;
     display: flex;
@@ -72,8 +77,8 @@ body {
 
 .mark {
     fill: white;
-    width: 46%;
-    height: 46%;
+    width: 36%;
+    height: 36%;
 }
 
 #meta-box {
@@ -100,6 +105,10 @@ body {
     border-radius: 4px;
 }
 
+.selected-result-box {
+    background-color: #333 !important;
+}
+
 #meta-box .results-box .icon {
     width: 14px;
     height: 14px;
@@ -124,4 +133,15 @@ body {
     display: flex;
     align-items: center;
     font-size: 12px;
+}
+
+#restart-game {
+    margin-top: 12px;
+    color: white;
+    font-weight: bold;
+    letter-spacing: 1.4px;
+    background-color: unset;
+    border: unset;
+    cursor: pointer;
+    font-family: Arial, Helvetica, sans-serif;
 }

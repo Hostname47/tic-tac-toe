@@ -13,7 +13,7 @@
 <body>
     <div id="app">
         <h1 id="title" class="blue">TIC TACT TOE</h1>
-        <p id="sub-title">created by <strong>MOUAD NASSRI</strong></p>
+        <p id="sub-title">created from scratch by <a href="https://mouad-nassri.netlify.app" target="_blank"><strong>MOUAD NASSRI</strong></a></p>
         
         <!-- x mark -->
         <svg class="mark x-mark none" viewBox="0 0 24 24"><path d="M20.46.73,12,9.18,3.54.73.72,3.54,9.18,12,.72,20.46l2.82,2.81L12,14.82l8.46,8.45,2.82-2.81L14.82,12l8.46-8.46Z"/></svg>
@@ -22,37 +22,48 @@
         <div id="board-box">
             <div id="meta-box">
                 <div class="results-box">
-                    <div class="result-box x-result-box">
+                    <div id="x-result-box" class="result-box selected-result-box">
                         <svg class="icon" viewBox="0 0 24 24"><path d="M20.46.73,12,9.18,3.54.73.72,3.54,9.18,12,.72,20.46l2.82,2.81L12,14.82l8.46,8.45,2.82-2.81L14.82,12l8.46-8.46Z"/></svg>
                         <span class="unselectable result">-</span>
                     </div>
-                    <div class="result-box o-result-box">
+                    <div id="o-result-box" class="result-box">
                         <svg class="icon" viewBox="0 0 260 260"><path d="M5.22,140.09V118.71c.31-1.39.71-2.77.92-4.18C13.78,64,41.6,29.68,89.37,11.9c9.4-3.5,19.69-4.66,29.56-6.9h21.39c3.48.62,7,1.29,10.44,1.85,65.58,10.46,112.27,74.72,102,140.42-8.92,57.25-53.09,99.51-110.61,105.82C81.48,259.75,23.8,219.47,9.09,160,7.47,153.46,6.5,146.74,5.22,140.09ZM210.29,129.7a80.78,80.78,0,0,0-80.36-81c-44.51-.11-80.86,36-81,80.35s36,80.86,80.36,81A80.81,80.81,0,0,0,210.29,129.7Z"/></svg>
                         <span class="unselectable result">-</span>
                     </div>
                 </div>
                 <div id="game-status-feedback">
-                    <div class="feedback" id="x-turn">
+                    <div class="feedback" id="x-turn-feedback">
                         <svg class="icon" viewBox="0 0 24 24"><path d="M20.46.73,12,9.18,3.54.73.72,3.54,9.18,12,.72,20.46l2.82,2.81L12,14.82l8.46,8.45,2.82-2.81L14.82,12l8.46-8.46Z"/></svg>
                         turn
                     </div>
-                    <div class="feedback none" id="o-turn">
+                    <div class="feedback none" id="o-turn-feedback">
                         <svg class="icon" viewBox="0 0 260 260"><path d="M5.22,140.09V118.71c.31-1.39.71-2.77.92-4.18C13.78,64,41.6,29.68,89.37,11.9c9.4-3.5,19.69-4.66,29.56-6.9h21.39c3.48.62,7,1.29,10.44,1.85,65.58,10.46,112.27,74.72,102,140.42-8.92,57.25-53.09,99.51-110.61,105.82C81.48,259.75,23.8,219.47,9.09,160,7.47,153.46,6.5,146.74,5.22,140.09ZM210.29,129.7a80.78,80.78,0,0,0-80.36-81c-44.51-.11-80.86,36-81,80.35s36,80.86,80.36,81A80.81,80.81,0,0,0,210.29,129.7Z"/></svg>
                         turn
                     </div>
+                    <span class="feedback none" id="draw-feedback">Draw - click on restart button to start again</span>
+                    <span class="feedback green-feedback none" id="x-win-feedback">
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M20.46.73,12,9.18,3.54.73.72,3.54,9.18,12,.72,20.46l2.82,2.81L12,14.82l8.46,8.45,2.82-2.81L14.82,12l8.46-8.46Z"/></svg>
+                        winner !
+                    </span>
+                    <span class="feedback green-feedback none" id="o-win-feedback">
+                        <svg class="icon" viewBox="0 0 260 260"><path d="M5.22,140.09V118.71c.31-1.39.71-2.77.92-4.18C13.78,64,41.6,29.68,89.37,11.9c9.4-3.5,19.69-4.66,29.56-6.9h21.39c3.48.62,7,1.29,10.44,1.85,65.58,10.46,112.27,74.72,102,140.42-8.92,57.25-53.09,99.51-110.61,105.82C81.48,259.75,23.8,219.47,9.09,160,7.47,153.46,6.5,146.74,5.22,140.09ZM210.29,129.7a80.78,80.78,0,0,0-80.36-81c-44.51-.11-80.86,36-81,80.35s36,80.86,80.36,81A80.81,80.81,0,0,0,210.29,129.7Z"/></svg>
+                        winner !
+                    </span>
                 </div>
             </div>
             <div id="board">
-                <div class="square" data-row="0" data-column="0" data-value="0"></div>
-                <div class="square" data-row="0" data-column="1" data-value="0"></div>
-                <div class="square" data-row="0" data-column="2" data-value="0"></div>
-                <div class="square" data-row="1" data-column="0" data-value="0"></div>
-                <div class="square" data-row="1" data-column="1" data-value="0"></div>
-                <div class="square" data-row="1" data-column="2" data-value="0"></div>
-                <div class="square" data-row="2" data-column="0" data-value="0"></div>
-                <div class="square" data-row="2" data-column="1" data-value="0"></div>
-                <div class="square" data-row="2" data-column="2" data-value="0"></div>
+                <div id="square-00" class="square" data-row="0" data-column="0" data-value="0"></div>
+                <div id="square-01" class="square" data-row="0" data-column="1" data-value="0"></div>
+                <div id="square-02" class="square" data-row="0" data-column="2" data-value="0"></div>
+                <div id="square-10" class="square" data-row="1" data-column="0" data-value="0"></div>
+                <div id="square-11" class="square" data-row="1" data-column="1" data-value="0"></div>
+                <div id="square-12" class="square" data-row="1" data-column="2" data-value="0"></div>
+                <div id="square-20" class="square" data-row="2" data-column="0" data-value="0"></div>
+                <div id="square-21" class="square" data-row="2" data-column="1" data-value="0"></div>
+                <div id="square-22" class="square" data-row="2" data-column="2" data-value="0"></div>
             </div>
+
+            <button id="restart-game">RESTART</button>
         </div>
     </div>
 </body>
