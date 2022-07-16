@@ -51,6 +51,7 @@ body {
 }
 
 #board {
+    position: relative;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -59,8 +60,6 @@ body {
     height: 350px;
     background-color: #111;
 }
-
-
 
 #board .square {
     position: relative;
@@ -157,4 +156,42 @@ body {
     border: unset;
     cursor: pointer;
     font-family: Arial, Helvetica, sans-serif;
+}
+
+.win-line {
+    position: absolute;
+    z-index: 2;
+    width: 8px;
+    height: 8px;
+    border-radius: 3px;
+    background-color: rgb(83, 235, 69);
+    transition: all 0.4s ease;
+}
+
+.top-left-bottom-right-rotate {
+    -ms-transform: rotate(-45deg); /* IE 9 */
+    -webkit-transform: rotate(-45deg); /* Chrome, Safari, Opera */
+    transform: rotate(-45deg);
+}
+
+.top-right-bottom-left-rotate {
+    -ms-transform: rotate(45deg); /* IE 9 */
+    -webkit-transform: rotate(45deg); /* Chrome, Safari, Opera */
+    transform: rotate(45deg);
+}
+
+@media screen and (max-width: 440px) {
+    #title {
+        font-size: 18px;
+    }
+
+    #sub-title {
+        text-align: center;
+        font-size: 12px;
+    }
+
+    #board {
+        width: 292px;
+        height: 292px;
+    }
 }

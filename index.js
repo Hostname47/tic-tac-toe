@@ -7,7 +7,9 @@ document.querySelectorAll('#board .square').forEach((square) => {
         mark_lock = false; // prevent any click event race condition
 
         // Delete mouseenter event animated x
-        square.querySelector('.light-mark').remove();
+        let lmark = square.querySelector('.light-mark');
+        if(lmark)
+            lmark.remove();
 
         let mark = document.querySelector(`.${role}-mark`).cloneNode(true);
         mark.classList.remove('none');
@@ -16,16 +18,21 @@ document.querySelectorAll('#board .square').forEach((square) => {
         square.dataset.value = role;
 
         let result = evaluate(square, role);
-
         /**
-         * First hide all feedback because in the next switch, the feedback will be changed.
+         * animate will see if the game is ended with a winner or draw and draw a line
+         * or show draw m
+         */
+        animate(result);
+        
+        /**
+         * First hide all feedback because in the next switch, the feedback will be set depends on the state of game.
          * Also, remove selected style from current player result box and the next switch will set it to
          * the other player if the game persist (reach default section)
          */
         document.querySelectorAll('#game-status-feedback .feedback').forEach(feedback => feedback.classList.add('none'));
         document.querySelectorAll('.result-box').forEach(box => box.classList.remove('selected-result-box'));
 
-        switch(result) {
+        switch(result['result']) {
             case 'win':
                 mark_lock = false;
                 document.querySelector(`#${role}-win-feedback`).classList.remove('none');
@@ -47,13 +54,11 @@ document.querySelectorAll('#board .square').forEach((square) => {
                 // Then we change turn feedback (for example : x turn => o turn)
                 document.querySelector(`#${role}-turn-feedback`).classList.remove('none');
                 document.querySelector(`#${role}-result-box`).classList.add('selected-result-box');
-                
         }
 
         mark_lock = true; // release the lock
     });
 
-    // Add hover event
     square.addEventListener('mouseenter', (event) => {
         if(square.dataset.value==0) {
             let mark = document.querySelector(`.${role}-mark`).cloneNode(true);
@@ -64,10 +69,52 @@ document.querySelectorAll('#board .square').forEach((square) => {
     });
     
     square.addEventListener('mouseleave', (event) => {
-        square.querySelector('.light-mark').remove();
+        if(square.dataset.value==0) {
+            square.querySelector('.light-mark').remove();
+        }
     });
-
 });
+
+function animate(result) {
+    switch(result.result) {
+        /**
+         * In case a player win we need to get the middle square of the line,
+         * then we add the square into it and stretch it to form the win line
+         * Notice that if the winner wins with diagonal line, then we need to rotate
+         * the line before stretch it
+         */
+        case 'win':
+            let middleSquare;
+            let line = document.querySelector('.win-line').cloneNode(true);
+            line.classList.remove('none');
+            switch(result.type) {
+                case 'horizontal':
+                    middleSquare = document.querySelector(`#board .square[data-row="${result.row}"][data-column="1"]`);
+                    middleSquare.appendChild(line);
+                    line.style.width = `${middleSquare.clientWidth * 3 - 20}px`;
+                    break;
+                case 'vertical':
+                    middleSquare = document.querySelector(`#board .square[data-column="${result.column}"][data-row="1"]`);
+                    middleSquare.appendChild(line);
+                    line.style.height = `${middleSquare.clientWidth * 3 - 20}px`;
+                    break;
+                case 'diagonal':
+                    middleSquare = document.querySelector(`#board .square[data-column="1"][data-row="1"]`);
+                    if(result.diagonal == 'top-left-bottom-right')
+                        line.classList.add('top-left-bottom-right-rotate');
+                    else
+                        line.classList.add('top-right-bottom-left-rotate');
+
+                    middleSquare.appendChild(line);
+                    line.style.height = `${middleSquare.clientWidth * 3 + 80}px`;
+                    break;
+            }
+            break;
+        case 'draw':
+
+            break;
+    }
+}
 
 document.querySelector('#restart-game').addEventListener('click', function() {
     document.querySelectorAll('#board .square').forEach((square) => {
@@ -99,11 +146,19 @@ function evaluate(square, role) {
     
     // 1. check horizontal match (If we get 3 element with same mark and same row, it means current player is winner)
     if(document.querySelectorAll(`#board .square[data-row="${squareRow}"][data-value="${role}"]`).length == 3) {
-        return 'win';
+        return {
+            result: 'win',
+            type: 'horizontal',
+            row: squareRow
+        };
     }
-    // 1. check vertical match (If we get 3 element with same mark and same column, it means current player is winner)
+    // 2. check vertical match (If we get 3 element with same mark and same column, it means current player is winner)
     if(document.querySelectorAll(`#board .square[data-column="${squareColumn}"][data-value="${role}"]`).length == 3) {
-        return 'win';
+        return {
+            result: 'win',
+            type: 'vertical',
+            column: squareColumn
+        };
     }
 
     /**
@@ -114,11 +169,19 @@ function evaluate(square, role) {
     if(squareRow + squareColumn == 2 || squareRow == squareColumn) {
         // First diagonal
         if(document.querySelectorAll(`#square-00[data-value="${role}"], #square-11[data-value="${role}"], #square-22[data-value="${role}"]`).length == 3) {
-            return 'win';
+            return {
+                result: 'win',
+                type: 'diagonal',
+                diagonal: 'top-left-bottom-right'
+            };
         }
         // Second diagonal
         if(document.querySelectorAll(`#square-02[data-value="${role}"], #square-11[data-value="${role}"], #square-20[data-value="${role}"]`).length == 3) {
-            return 'win';
+            return {
+                result: 'win',
+                type: 'diagonal',
+                diagonal: 'top-right-bottom-left'
+            };
         }
     }
 
@@ -127,6 +190,12 @@ function evaluate(square, role) {
      * one left, that means the game is a draw
      */
     if(document.querySelectorAll(`#board .square[data-value="0"]`).length == 0) {
-        return 'draw';
+        return {
+            result: 'draw',
+        };
     }
+
+    return {
+        result: 'continue',
+    };
 }
