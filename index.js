@@ -22,7 +22,7 @@ document.querySelectorAll('#board .square').forEach((square) => {
          * animate will see if the game is ended with a winner or draw and draw a line
          * or show draw m
          */
-        animate(result);
+        animate(result, role);
         
         /**
          * First hide all feedback because in the next switch, the feedback will be set depends on the state of game.
@@ -75,7 +75,14 @@ document.querySelectorAll('#board .square').forEach((square) => {
     });
 });
 
-function animate(result) {
+function animate(result, role) {
+    let board = document.querySelector('#board');
+    let resultBox = document.querySelector('#board-result-box');
+    let iconsBox = document.createElement('div');
+    let title = document.createElement('span');
+    let subTitle = document.createElement('span');
+    let x = document.querySelector('.x-mark').cloneNode(true);
+    let o = document.querySelector('.o-mark').cloneNode(true);
     switch(result.result) {
         /**
          * In case a player win we need to get the middle square of the line,
@@ -109,8 +116,43 @@ function animate(result) {
                     line.style.height = `${middleSquare.clientWidth * 3 + 80}px`;
                     break;
             }
+
+            setTimeout(() => {
+                resultBox.classList.remove('none');
+                title.textContent = 'WINNER !';
+                title.classList.add('title');
+                subTitle.textContent = 'Press restart button below to start again';
+                subTitle.classList.add('fs11');
+                iconsBox.classList.add('full-center');
+                if(role == 'x') {
+                    x.classList.remove('none', 'x-mark', 'mark');
+                    x.classList.add('size28', 'mr8');
+                    iconsBox.append(x);
+                } else {
+                    o.classList.remove('none', 'o-mark', 'mark');
+                    o.classList.add('size28');
+                    iconsBox.append(o);
+
+                }
+                resultBox.append(iconsBox, title, subTitle);
+                board.appendChild(resultBox);
+            }, 1200)
+
             break;
         case 'draw':
+            resultBox.classList.remove('none');
+            title.textContent = 'Draw';
+            subTitle.textContent = 'Press restart button below to start again';
+            subTitle.classList.add('fs11');
+            iconsBox.classList.add('full-center');
+            x.classList.remove('none', 'x-mark', 'mark');
+            o.classList.remove('none', 'o-mark', 'mark');
+            x.classList.add('size28', 'mr8');
+            o.classList.add('size28');
+            iconsBox.append(x, o);
+            title.classList.add('title');
+            resultBox.append(iconsBox, title, subTitle);
+            board.appendChild(resultBox);
 
             break;
     }
@@ -125,6 +167,8 @@ document.querySelector('#restart-game').addEventListener('click', function() {
         document.querySelectorAll('.result-box').forEach(box => box.classList.remove('selected-result-box'));
         document.querySelector(`#x-turn-feedback`).classList.remove('none');
         document.querySelector(`#x-result-box`).classList.add('selected-result-box');
+        document.querySelector('#board-result-box').innerHTML = '';
+        document.querySelector('#board-result-box').classList.add('none');
         role = 'x';
         mark_lock = true; // release the lock
     });
@@ -149,7 +193,7 @@ function evaluate(square, role) {
         return {
             result: 'win',
             type: 'horizontal',
-            row: squareRow
+            row: squareRow,
         };
     }
     // 2. check vertical match (If we get 3 element with same mark and same column, it means current player is winner)
@@ -157,7 +201,7 @@ function evaluate(square, role) {
         return {
             result: 'win',
             type: 'vertical',
-            column: squareColumn
+            column: squareColumn,
         };
     }
 
@@ -172,7 +216,7 @@ function evaluate(square, role) {
             return {
                 result: 'win',
                 type: 'diagonal',
-                diagonal: 'top-left-bottom-right'
+                diagonal: 'top-left-bottom-right',
             };
         }
         // Second diagonal
@@ -180,7 +224,7 @@ function evaluate(square, role) {
             return {
                 result: 'win',
                 type: 'diagonal',
-                diagonal: 'top-right-bottom-left'
+                diagonal: 'top-right-bottom-left',
             };
         }
     }
