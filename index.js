@@ -75,6 +75,7 @@ document.querySelectorAll('#board .square').forEach((square) => {
     });
 });
 
+let animationTimeout;
 function animate(result, role) {
     let board = document.querySelector('#board');
     let resultBox = document.querySelector('#board-result-box');
@@ -117,7 +118,7 @@ function animate(result, role) {
                     break;
             }
 
-            setTimeout(() => {
+            animationTimeout = setTimeout(() => {
                 resultBox.classList.remove('none');
                 title.textContent = 'WINNER !';
                 title.classList.add('title');
@@ -170,6 +171,7 @@ document.querySelector('#restart-game').addEventListener('click', function() {
         document.querySelector('#board-result-box').innerHTML = '';
         document.querySelector('#board-result-box').classList.add('none');
         role = 'x';
+        clearTimeout(animationTimeout);
         mark_lock = true; // release the lock
     });
 });
